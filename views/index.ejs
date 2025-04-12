@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ImageCypher - Secure Image Encryption</title>
+  <meta name="description" content="A secure image encryption and decryption tool" />
+  <meta name="author" content="ImageCypher" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles/style.css">
+
+  <meta property="og:title" content="ImageCypher - Secure Image Encryption" />
+  <meta property="og:description" content="A secure image encryption and decryption tool" />
+  <meta property="og:type" content="website" />
+</head>
+
+<body>
+  <div id="themeToggle" style="text-align: right; margin-bottom: 1rem; font-size: 1.5rem; cursor: pointer;">
+    🌙
+  </div>
+
+  <div class="container">
+    <header>
+      <h1>🔒 ImageCypher</h1>
+      <p class="subtitle">Secure Image Encryption</p>
+    </header>
+
+    <main>
+      <!-- Encrypt Form -->
+      <section class="encrypt-section">
+        <h2>Encrypt Image</h2>
+        <form id="encryptForm" enctype="multipart/form-data">
+          <div class="card">
+            <div id="encryptDrop" class="dropzone">
+              <div class="dropzone-content">
+                <img src="upload-icon.svg" alt="Upload" class="upload-icon">
+                <p>Drag & drop your image here</p>
+                <p class="or-text">- OR -</p>
+                <label for="encryptInput" class="custom-file-input">Choose File</label>
+                <input type="file" name="image" id="encryptInput" accept="image/*" class="hidden-input">
+              </div>
+              <div id="encrypt-preview" class="image-preview"></div>
+            </div>
+            <button type="submit" disabled id="encryptBtn" class="action-button">Encrypt</button>
+          </div>
+          <div id="encryptResult" class="result-container"></div>
+        </form>
+      </section>
+
+      <!-- Decrypt Form -->
+      <section class="decrypt-section">
+        <h2>Decrypt Image</h2>
+        <form id="decryptForm" enctype="multipart/form-data">
+          <div class="card">
+            <div class="dropzone-container">
+              <div id="decryptDrop" class="dropzone half-width">
+                <div class="dropzone-content">
+                  <img src="upload-icon.svg" alt="Upload" class="upload-icon">
+                  <p>Drop encrypted image</p>
+                  <label for="decryptInput" class="custom-file-input">Choose File</label>
+                  <input type="file" name="image" id="decryptInput" accept="image/*" class="hidden-input">
+                </div>
+                <div id="decrypt-preview" class="image-preview"></div>
+              </div>
+
+              <div id="keyDrop" class="dropzone half-width">
+                <div class="dropzone-content">
+                  <img src="key-icon.svg" alt="Key" class="upload-icon">
+                  <p>Drop key file</p>
+                  <label for="keyInput" class="custom-file-input">Choose File</label>
+                  <input type="file" name="key" id="keyInput" class="hidden-input">
+                </div>
+                <div id="key-preview" class="image-preview"></div>
+              </div>
+            </div>
+            <button type="submit" disabled id="decryptBtn" class="action-button">Decrypt</button>
+          </div>
+          <div id="decryptResult" class="result-container"></div>
+        </form>
+      </section>
+    </main>
+
+    <footer>
+      <p>© 2025 ImageCypher - Secure your images with confidence</p>
+    </footer>
+  </div>
+
+  <!-- Icons SVG -->
+  <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+    <symbol id="upload-icon" viewBox="0 0 24 24">
+      <path d="M12 4V16M12 4L8 8M12 4L16 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M3 18V20C3 21.1046 3.89543 22 5 22H19C20.1046 22 21 21.1046 21 20V18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="key-icon" viewBox="0 0 24 24">
+      <path d="M15.5 7.5L19 4M21 2L19 4L21 2ZM11.39 11.61C11.9064 12.1195 12.3168 12.726 12.5975 13.3948C12.8782 14.0635 13.0244 14.7813 13.0244 15.5075C13.0244 16.2337 12.8782 16.9515 12.5975 17.6202C12.3168 18.289 11.9064 18.8955 11.39 19.405C10.8775 19.9201 10.2705 20.3297 9.60143 20.6099C8.9324 20.89 8.21433 21.036 7.48808 21.036C6.76184 21.036 6.04377 20.89 5.37474 20.6099C4.70571 20.3297 4.09866 19.9201 3.58625 19.405C2.55625 18.375 2 17.0151 2 15.5937C2 14.1724 2.55625 12.8124 3.58625 11.7825C4.61625 10.7525 5.97609 10.1962 7.3975 10.1962C8.81891 10.1962 10.1788 10.7525 11.2087 11.7825L11.39 11.61ZM11.39 11.61L15.5 7.5L11.39 11.61ZM15.5 7.5L18.5 10.5L22 7L19 4L15.5 7.5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+  </svg>
+
+  <!-- Script Files -->
+  <script src="/scripts/main.js"></script>
+</body>
+</html>
