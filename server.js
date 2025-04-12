@@ -3,9 +3,10 @@ const multer = require("multer");
 const path = require("path");
 const encrypt = require("./encrypt");
 const decrypt = require("./decrypt");
-const app = express();
 const fs = require("fs");
+const archiver = require("archiver");
 
+const app = express();
 const upload = multer({ dest: "uploads/" });
 
 app.set("view engine", "ejs");
@@ -21,7 +22,6 @@ app.post("/encrypt", upload.single("image"), async (req, res) => {
   const ext = path.extname(originalName);
   const name = path.parse(originalName).name;
   const timestamp = Date.now();
-  const tempPath = req.file.path;
 
   const encryptedImageName = `${name}_encrypted_${timestamp}${ext}`;
   const keyFileName = `${name}_key_${timestamp}.txt`;
@@ -30,12 +30,25 @@ app.post("/encrypt", upload.single("image"), async (req, res) => {
   const outputKey = path.join("uploads", keyFileName);
 
   try {
-    
-      const result = await encrypt(uploadedPath, outputImg, outputKey,tempPath);
-      fs.unlink(tempPath, (err) => {
-        if (err) console.error("Error deleting temp file:", err);
+    await encrypt(uploadedPath, outputImg, outputKey);
+    fs.unlink(uploadedPath, () => {});
+
+    const zipPath = `uploads/${name}_cypher_${timestamp}.zip`;
+    const output = fs.createWriteStream(zipPath);
+    const archive = archiver("zip", { zlib: { level: 9 } });
+
+    output.on("close", () => {
+      res.download(zipPath, () => {
+        fs.unlink(zipPath, () => {});
+        fs.unlink(outputImg, () => {});
+        fs.unlink(outputKey, () => {});
       });
-    res.json(result);
+    });
+
+    archive.pipe(output);
+    archive.file(outputImg, { name: encryptedImageName });
+    archive.file(outputKey, { name: keyFileName });
+    archive.finalize();
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -54,20 +67,17 @@ app.post(
     const ext = path.extname(imageFile.originalname);
     const baseName = path.parse(imageFile.originalname).name;
     const timestamp = Date.now();
-    const tempPath = imageFile.path;
 
     const decryptedImageName = `${baseName}_decrypted_${timestamp}${ext}`;
     const outputImg = path.join("uploads", decryptedImageName);
 
     try {
-      const result = await decrypt(imgPath, keyPath, outputImg, tempPath);
-      fs.unlink(imgPath, (err) => {
-        if (err) console.error("Error deleting image temp file:", err);
+      await decrypt(imgPath, keyPath, outputImg);
+      fs.unlink(imgPath, () => {});
+      fs.unlink(keyPath, () => {});
+      res.download(outputImg, () => {
+        fs.unlink(outputImg, () => {});
       });
-      fs.unlink(keyPath, (err) => {
-        if (err) console.error("Error deleting key temp file:", err);
-      });
-      res.json({ outputImageFile: result });
     } catch (err) {
       res.status(500).json({ error: err.message });
     }

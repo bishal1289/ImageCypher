@@ -92,3 +92,25 @@ window.addEventListener("DOMContentLoaded", () => {
 });
 
 themeToggle.addEventListener("click", toggleDarkMode);
+
+document.getElementById("encryptForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const form = new FormData(e.target);
+  const res = await fetch("/encrypt", { method: "POST", body: form });
+  const blob = await res.blob();
+  const downloadLink = document.createElement("a");
+  downloadLink.href = window.URL.createObjectURL(blob);
+  downloadLink.download = "imageCypher_encrypted.zip";
+  downloadLink.click();
+});
+
+document.getElementById("decryptForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const form = new FormData(e.target);
+  const res = await fetch("/decrypt", { method: "POST", body: form });
+  const blob = await res.blob();
+  const downloadLink = document.createElement("a");
+  downloadLink.href = window.URL.createObjectURL(blob);
+  downloadLink.download = "imageCypher_decrypted.png";
+  downloadLink.click();
+});
