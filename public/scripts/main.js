@@ -65,33 +65,6 @@ document.getElementById("decryptForm").addEventListener("submit", async (e) => {
     2
   );
 });
-const themeToggle = document.getElementById("themeToggle");
-
-function applyThemeIcon(isDark) {
-  themeToggle.textContent = isDark ? "🌙" : "☀️";
-}
-
-function toggleDarkMode() {
-  const isDark = document.body.classList.toggle("dark-mode");
-  localStorage.setItem("theme", isDark ? "dark" : "light");
-  applyThemeIcon(isDark);
-}
-
-window.addEventListener("DOMContentLoaded", () => {
-  const savedTheme = localStorage.getItem("theme");
-
-  let isDark = false;
-  if (savedTheme) {
-    isDark = savedTheme === "dark";
-  } else {
-    isDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-  }
-
-  if (isDark) document.body.classList.add("dark-mode");
-  applyThemeIcon(isDark);
-});
-
-themeToggle.addEventListener("click", toggleDarkMode);
 
 document.getElementById("encryptForm").addEventListener("submit", async (e) => {
   e.preventDefault();
